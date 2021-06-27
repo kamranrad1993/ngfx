@@ -47,6 +47,30 @@ while still being able to use platform-specific code for
 high-performance optimizations, and for achieving optimal interaction 
 with the platform.
 
+## Competitive Analysis
+
+Another approach to achieving a cross-platform solution is to use an
+emulation layer such as MoltenVK to emulate a different platform's APIs
+on top of Apple's Metal platform APIs.  However there are several 
+drawbacks:
+- No support from Apple.  By using MoltenVK, it is unlikely that you can 
+receive any support from Apple for any issues that may be encountered 
+on the platform.  In fact, in the past, an app that was shipped to the 
+Apple app store was temporarily kicked off the app store, because 
+MoltenVK violated Apple's terms (at the time, MoltenVK used internal APIs).
+- Inability to leverage competitive features.  Apple has a GPU developed 
+in house with competitive features, such as support for combining 
+rendering and compute operations using a single render pass while sharing 
+local memory, using "Tile Shaders".  This is supported using Metal 
+"Tile Shaders" and significantly improves memory efficiency by 
+avoiding unnecessary reads/writes to external memory.  This feature is 
+not exposed in Vulkan because no other GPUs support this.  As Apple 
+continues to differentiate from competitors, these features will be 
+exposed through Metal, not through Vulkan + some emulation layer.
+- Limitations of performance and functionality.  An emulation layer 
+adds overhead compared to using Metal APIs directly, and it is already 
+clear that MoltenVK doesn't fully support all the Vulkan functionality.
+
 ## Modules
 
 ![Modules](doc/low_level_arch_2.svg)
