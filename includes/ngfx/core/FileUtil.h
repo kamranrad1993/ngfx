@@ -51,5 +51,6 @@ public:
   static std::vector<std::string>
   findFiles(const std::vector<std::string> &paths,
             const std::vector<std::string> &extensions);
+  static bool exists(const std::filesystem::path &path);
 };
 }; // namespace ngfx

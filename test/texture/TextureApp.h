@@ -19,7 +19,7 @@
  * under the License.
  */
 #pragma once
-#include "ngfx/Application.h"
+#include "ngfx/core/Application.h"
 #include "ngfx/drawOps/DrawTextureOp.h"
 #include <memory>
 

@@ -34,6 +34,7 @@
 builddir
 external
 build_scripts/__pycache__
+build
 
 # MkDocs
 docs

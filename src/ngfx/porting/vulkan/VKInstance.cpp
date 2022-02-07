@@ -18,6 +18,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+#include <algorithm>
 #include "ngfx/porting/vulkan/VKInstance.h"
 #include "ngfx/core/DebugUtil.h"
 #include "ngfx/porting/vulkan/VKConfig.h"
@@ -51,7 +52,7 @@ void VKInstance::create(const char *appName, const char *engineName,
     if (validationLayerPresent) {
       instanceLayers.push_back(validationLayerName);
     } else {
-      NGFX_ERR("Validation layer VK_LAYER_KHRONOS_validation not found");
+      NGFX_LOG_TRACE("Validation layer VK_LAYER_KHRONOS_validation not found");
     }
   }
 

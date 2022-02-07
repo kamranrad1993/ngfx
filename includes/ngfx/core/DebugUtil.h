@@ -21,10 +21,11 @@
 #pragma once
 #include <cstdio>
 #include <cstdlib>
+#include <execinfo.h>
 #ifndef __PRETTY_FUNCTION__
 #define __PRETTY_FUNCTION__ __FUNCTION__
 #endif
-#define NGFX_LOG(fmt, ...) fprintf(stderr, fmt "\n", ##__VA_ARGS__)
+#define NGFX_LOG(fmt, ...) fprintf(stderr, fmt, "\n", ##__VA_ARGS__)
 #define NGFX_LOG_TRACE(fmt, ...)                                               \
   NGFX_LOG("[%s][%s][%d] " fmt, __FILE__, __PRETTY_FUNCTION__, __LINE__,       \
            ##__VA_ARGS__)
@@ -38,6 +39,19 @@ struct DebugUtil {
 #define NGFX_ERR(fmt, ...)                                                     \
   {                                                                            \
     fprintf(stderr, "ERROR: [%s][%s][%d] " fmt "\n", __FILE__,                 \
-            __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);                     \
+            __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__, "\n");               \
+    /*TODO Add Linux Preprocessor Directive*/                                  \
+    void *array[10];                                                           \
+    size_t size;                                                               \
+    char **strings;                                                            \
+    size = backtrace(array, 10);                                               \
+    strings = backtrace_symbols(array, size);                                  \
+    if (strings == NULL) {                                                     \
+        perror("backtrace_symbols");                                           \
+        exit(EXIT_FAILURE);                                                    \
+    }                                                                          \
+    for (int j = 0; j < size; j++)                                             \
+        printf("%s\n", strings[j]);                                            \
+    free(strings);                                                             \
     DebugUtil::Exit(1);                                                        \
   }

@@ -19,7 +19,7 @@
  * under the License.
  */
 
-#include "RegexUtil.h"
+#include "ngfx/regex/RegexUtil.h"
 #include "ngfx/core/DebugUtil.h"
 using namespace std;
 using namespace ngfx;

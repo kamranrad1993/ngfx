@@ -14,9 +14,12 @@ set(EXTERNAL_DIR ${CMAKE_CURRENT_SOURCE_DIR}/external CACHE STRING "External Dir
 set(VCPKG_DIR ${EXTERNAL_DIR}/vcpkg CACHE STRING "VCPKG Directory")
 set(CURRENT_VERSION 1.0.0)
 
+set( CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Wall -O3 -fPIC" )
+set( CMAKE_C_FLAGS  "${CMAKE_C_FLAGS} -Wall -O3 -fPIC" )
+
 option(NGFX_GRAPHICS_BACKEND_METAL "build ngfx metal backend" OFF)
 option(NGFX_GRAPHICS_BACKEND_DIRECT3D12 "build ngfx directx12 backend" OFF)
-option(NGFX_GRAPHICS_BACKEND_VULKAN "build ngfx vulkan backend" OFF)
+option(NGFX_GRAPHICS_BACKEND_VULKAN "build ngfx vulkan backend" ON)
 if(MSVC)
     set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL" CACHE STRING "MSVC Runtime Library")
 endif()
@@ -25,7 +28,8 @@ set(CMAKE_EXECUTE_PROCESS_COMMAND_ECHO STDOUT) # echo all process commands
 
 include(GNUInstallDirs)
 
-set(NGFX_DATA_DIR ${CMAKE_INSTALL_FULL_DATADIR}/ngfx/data)
+#set(NGFX_DATA_DIR ${CMAKE_INSTALL_FULL_DATADIR}/ngfx/data)
+set(NGFX_DATA_DIR ${CMAKE_CURRENT_BINARY_DIR}/data)
 
 find_package(PkgConfig REQUIRED)
 
@@ -71,13 +75,15 @@ file(GLOB_RECURSE NGFX_SOURCE_FILES
   src/ngfx/computeOps/* src/ngfx/drawOps/* src/ngfx/graphics/* src/ngfx/input/*
   src/ngfx/regex/*
 )
+set(NGFX_HEADER_DIR ${CMAKE_CURRENT_SOURCE_DIR}/includes)
+
 if(NGFX_GRAPHICS_BACKEND_VULKAN)
     set(WINDOW_BACKEND_GLFW 1)
     file(GLOB_RECURSE NGFX_GRAPHICS_BACKEND_SOURCE_FILES src/ngfx/porting/vulkan/*.cpp src/ngfx/porting/vulkan/*.h)
     set(NGFX_GRAPHICS_BACKEND_CFLAGS -DNGFX_GRAPHICS_BACKEND_VULKAN)
     set(NGFX_GRAPHICS_BACKEND_LIBS vulkan)
     if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-        set(WINDOW_BACKEND_CFLAGS -DVK_USE_PLATFORM_XCB_KHR -DVK_USE_PLATFORM_XLIB_KHR)
+        set(WINDOW_BACKEND_CFLAGS -DVK_USE_PLATFORM_XCB_KHR -DVK_USE_PLATFORM_XLIB_KHR )
     elseif(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
         set(WINDOW_BACKEND_CFLAGS -DVK_USE_PLATFORM_WIN32_KHR)
     elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
@@ -130,7 +136,8 @@ target_link_libraries(ngfx
     ${SHADERC_LIBRARIES}
     ${SPIRV_CROSS_LIBRARIES}
 )
-target_include_directories(ngfx PUBLIC . src
+target_include_directories(ngfx PUBLIC
+    ${NGFX_HEADER_DIR}
     ${GLM_INCLUDE_DIRS}
     ${STB_INCLUDE_DIRS}
     ${JSON_INCLUDE_DIRS}
@@ -167,7 +174,12 @@ else()
 add_executable(${name} ${TEST_SOURCE_FILES})
 endif()
 target_link_libraries(${name} ngfx)
+#target_include_directories(${name} PUBLIC
+    #${TEST_SOURCE_FILES}/${name}
+#)
 endfunction()
+
+build_test(texture)
 
 function(build_tool name)
 file(GLOB_RECURSE TOOL_SOURCE_FILES tools/${name}.cpp tools/${name}*.h)
@@ -184,7 +196,7 @@ message(STATUS "\n"
 )
 
 if (NGFX_GRAPHICS_BACKEND_VULKAN)
-#build_tool(compile_shaders_vk)
+build_tool(compile_shaders_vk)
 elseif(NGFX_GRAPHICS_BACKEND_DIRECT3D12)
 build_tool(compile_shaders_dx12)
 elseif(NGFX_GRAPHICS_BACKEND_METAL)
@@ -241,7 +253,7 @@ file(GLOB_RECURSE NGFX_DATA_FILES data/*)
 install(FILES ${NGFX_DATA_FILES} DESTINATION ${CMAKE_INSTALL_DATADIR}/ngfx/data)
 
 function(install_headers folder)
-file(GLOB_RECURSE NGFX_HEADER_FILES src/${folder}/*.h)
+file(GLOB_RECURSE NGFX_HEADER_FILES includes/${folder}/*.h)
 install(FILES ${NGFX_HEADER_FILES} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${folder})
 endfunction()
 

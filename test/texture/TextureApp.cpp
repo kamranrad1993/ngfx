@@ -18,7 +18,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-#include "ngfx/TextureApp.h"
+#include "TextureApp.h"
 #include "ngfx/graphics/ShaderModule.h"
 #include <memory>
 using namespace ngfx;
@@ -28,7 +28,7 @@ using namespace std;
 TextureApp::TextureApp(): Application("Texture")  {}
 
 void TextureApp::onInit() {
-    texture.reset(Texture::create(graphicsContext.get(), graphics.get(), "GP0056_BACK.JPG"));
+    texture.reset(Texture::create(graphicsContext.get(), graphics.get(), "eog-wallpaper.png"));
     drawTextureOp.reset(new DrawTextureOp(graphicsContext.get(), texture.get()));
 }
 

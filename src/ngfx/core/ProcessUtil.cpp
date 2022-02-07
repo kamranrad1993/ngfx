@@ -19,7 +19,7 @@
  * under the License.
  */
 
-#include "ProcessUtil.h"
+#include "ngfx/core/ProcessUtil.h"
 #ifdef _WIN32
 #include <windows.h>
 #else

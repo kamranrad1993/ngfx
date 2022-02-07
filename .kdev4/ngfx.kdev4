@@ -1,0 +1,45 @@
+[Buildset]
+BuildItems=@Variant(\x00\x00\x00\t\x00\x00\x00\x00\x01\x00\x00\x00\x0b\x00\x00\x00\x00\x01\x00\x00\x00\x08\x00n\x00g\x00f\x00x)
+
+[CMake]
+Build Directory Count=1
+Current Build Directory Index-Host System=0
+
+[CMake][CMake Build Directory 0]
+Build Directory Path=/home/johndoe/Temp/ngfx/build
+Build Type=Debug
+CMake Binary=/home/johndoe/.local/bin/cmake
+CMake Executable=/home/johndoe/.local/bin/cmake
+Environment Profile=
+Extra Arguments=
+Install Directory=/usr/local
+Runtime=Host System
+
+[Launch]
+Launch Configurations=Launch Configuration 0
+
+[Launch][Launch Configuration 0]
+Configured Launch Modes=execute
+Configured Launchers=nativeAppLauncher
+Name=Test_Texture
+Type=Native Application
+
+[Launch][Launch Configuration 0][Data]
+Arguments=
+Dependencies=@Variant(\x00\x00\x00\t\x00\x00\x00\x00\x00)
+Dependency Action=Nothing
+EnvironmentGroup=
+Executable=file:///home/johndoe/Temp/ngfx
+External Terminal=konsole --noclose --workdir %workdir -e %exe
+Kill Before Executing Again=4194304
+Project Target=ngfx,texture
+Use External Terminal=false
+Working Directory=
+isExecutable=false
+
+[MakeBuilder]
+Number Of Jobs=8
+Override Number Of Jobs=true
+
+[Project]
+VersionControlSupport=kdevgit

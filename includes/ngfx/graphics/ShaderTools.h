@@ -107,7 +107,8 @@ private:
   void applyPatches(const std::vector<std::string> &patchFiles,
                     std::string outDir);
   int cmd(std::string str);
-  int compileShaderGLSL(const std::string &src, shaderc_shader_kind shaderKind,
+  int compileShaderGLSL(const std::string fileName,
+                        const std::string &src, shaderc_shader_kind shaderKind,
                         const MacroDefinitions &defines, std::string &spv,
                         bool verbose = true,
                         shaderc_optimization_level optimizationLevel =
